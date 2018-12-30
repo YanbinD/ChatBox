@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+
+  <body class="chat">
+    <div class="chat__sidebar">
+      <h3>Participants</h3>
+      <div id="users"></div>
+    </div>
+
+    <div class="chat__main">
+      <!-- used for rendering individual message  -->
+      <ol id="messages" class="chat__messages"></ol>
+
+      <div class="chat__footer">
+        <!-- use to render the form field to enter message -->
+        <!-- id will be use for js to retreat the data and css for styling -->
+        <form id="message-form">
+          <input
+            name="message"
+            type="text"
+            placeholder="Message"
+            autofocus
+            autocomplete="off"
+          />
+          <button>Send</button>
+        </form>
+        <!-- Send Location button -->
+        <button id="send-location">Send location</button>
+      </div>
+    </div>
+
+
+
+    <!-- making the method for socket.io available  -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- create a connection
+  <script>
+    var socket = io();
+
+    socket.on('connect', ()=> {
+      console.log('connect to server');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('disconnect to server');
+    });
+  </script>  -->
+
+    <script src="/js/libs/jquery-3.1.0.min.js"></script>
+    <script src="/js/client.js"></script>
+  </body>
+</html>
