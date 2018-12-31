@@ -27,7 +27,7 @@ socket.on("newMessageFromServer", function(message) {
 });
 
 // ===== Listen for the Location message from server =====
-socket.on("newLocationMessage", function(message) {
+socket.on("newLocationMessageFromServer", function(message) {
   let formattedTime = moment(message.createdAt).format("h:mm a");
   let li = jQuery("<li></li>");
   let a = jQuery('<a target="_blank">My current location</a>');

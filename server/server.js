@@ -2,8 +2,7 @@ const path = require('path');
 const http = require('http');  // >> 3. import http module for integrating Socket.io
 const express = require('express');
 const socketIO = require('socket.io');
-
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 // >> 1: instead of doing just `__dirname+ /../public` which goes in and out of the server directory 
 // use the `path` module : only shows a resulting path instead of all the intermediate path, also result in a cross os compatible path 
 const publicPath = path.join(__dirname, '../public');
@@ -41,7 +40,7 @@ io.on('connection', (socket) => {
 		callback("Server got it");
 	});
 
-	// ==== GEO location ==== 
+	// ==== Listen for the location message ==== 
 	socket.on('location-from-client', (coords) => {
 		io.emit('newLocationMessageFromServer', generateLocationMessage('Admin', coords.latitude, coords.longitude));
 	});
@@ -55,7 +54,3 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
   console.log(`Server is up on ${port}`);
 });
-
-
-// io.on('connection') 
-// socket.on('connect')
