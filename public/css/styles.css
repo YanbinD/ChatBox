@@ -197,6 +197,8 @@ button:disabled {
 .message__title span {
   color: #999;
 }
+
+/* Used in media queries for different media type/ devices  */
 @media (max-width: 600px) {
   * {
     font-size: 1rem;
