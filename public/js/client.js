@@ -27,6 +27,7 @@ socket.on("newMessageFromServer", function(message) {
   });
 
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 // ===== Listen for the Location message from server =====
@@ -40,6 +41,7 @@ socket.on("newLocationMessageFromServer", function(message) {
   });
 
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 // ========= Use JQuery to construct the input-box and SEND out the message  =========
@@ -87,3 +89,20 @@ locationButton.on("click", function() {
     }
   );
 });
+
+function scrollToBottom () {
+  // Selectors by id 
+  var messages = jQuery('#messages');
+  var newMessage = messages.children('li:last-child')
+  // Heights
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();
+  // http://api.jquery.com/innerheight/ innerHeight: height of the elemetn after CSS st
+
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight); //setting the scroll top value 
+  }
+}
