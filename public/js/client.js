@@ -14,10 +14,7 @@ socket.on("connect", function() {
     if (err) {
       alert(err);
       window.location.href= '/'; //redirect back to the homepage 
-    } else {
-      console.log("no error");
-      
-    }
+    } 
   }) 
 });
 

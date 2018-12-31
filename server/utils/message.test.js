@@ -1,7 +1,7 @@
 const expect = require('expect'); //load in expect module 
 
 // load in the module that is being tested, use ES6 Syntax to extract the letiable  
-const {generateMessage} = require('./message');
+const {generateMessage, generateLocationMessage} = require('./message');
 
 // describe block 
 describe('generateMessage', () => {
