@@ -31,14 +31,15 @@ io.on("connection", socket => {
   socket.on("join", (params, callback) => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback("Name and room name are required.");
-    }
+	}
+	console.log(params.room.toLowerCase());
 	// --------------- implementation for rooms -----------------
-	socket.join(params.room);
+	socket.join(params.room.toLowerCase());
 	// --------implementation for Participant's list --------
 	users.removeUser(socket.id); //remove the user from previous room 
-	users.addUser(socket.id, params.name, params.room);// add the joined user to the List 
+	users.addUser(socket.id, params.name, params.room.toLowerCase());// add the joined user to the List 
 	
-	io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+	io.to(params.room).emit('updateUserList', users.getUserList(params.room.toLowerCase()));
 
     // ===== Emit to notify new user in the chat room =====
     socket.emit(
