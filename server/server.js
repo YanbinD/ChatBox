@@ -26,13 +26,26 @@ app.use(express.static(publicPath));
 /* socket argument in the call back functio represent the the connected socket 
 instead of all the users that connected to the server  */
 io.on("connection", socket => {
-  console.log("New user connected");
-
+  
   socket.on("join", (params, callback) => {
+	console.log(`${params.name} connected`);
+	
+	// validate name and room name 
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback("Name and room name are required.");
+	} 
+
+	// check for user with the same name 
+	let duplicate = false; 
+	users.getUserList(params.room).forEach(userName => {
+		if (params.name.localeCompare(userName, 'en', {sensitivity : 'base'}) === 0 ) {
+			duplicate = true;
+		}
+	});
+	if (duplicate) {
+		return callback(`Name is taken in the chat room ${params.room}, please choose another name`);
 	}
-	console.log(params.room.toLowerCase());
+
 	// --------------- implementation for rooms -----------------
 	socket.join(params.room.toLowerCase());
 	// --------implementation for Participant's list --------
