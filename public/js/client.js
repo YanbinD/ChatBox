@@ -8,7 +8,17 @@ let socket = io();
 
 //fire up when the server comes online (listen for a connected server)
 socket.on("connect", function() {
-  console.log("Connected to server");
+  // console.log("Connected to server");
+  const params = jQuery.deparam(window.location.search);
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      window.location.href= '/'; //redirect back to the homepage 
+    } else {
+      console.log("no error");
+      
+    }
+  }) 
 });
 
 //fire up when the server goes down (listen for a disconnected server)

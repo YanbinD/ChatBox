@@ -3,6 +3,7 @@ const http = require('http');  // >> 3. import http module for integrating Socke
 const express = require('express');
 const socketIO = require('socket.io');
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const { isRealString } = require('./utils/validation');
 // >> 1: instead of doing just `__dirname+ /../public` which goes in and out of the server directory 
 // use the `path` module : only shows a resulting path instead of all the intermediate path, also result in a cross os compatible path 
 const publicPath = path.join(__dirname, '../public');
@@ -31,6 +32,13 @@ io.on('connection', (socket) => {
 	// ===== Emit to notify new entry in the chat room =====
 	socket.broadcast.emit('newMessageFromServer', generateMessage('Admin', 'New user joined'));
 
+	socket.on('join', (params, callback) => {
+		if (!isRealString(params.name) || !isRealString(params.room)) {
+		  return callback('Name and room name are required.');
+		}
+		callback(); // not passing anything if no error 
+	})
+	
 	// ===== Listen to the `messageFromClient` from client =====
 	socket.on('messageFromClient', (message, callback) => {
 		console.log('messageFromClient: ', message);
