@@ -52,7 +52,7 @@ io.on("connection", socket => {
 	users.removeUser(socket.id); //remove the user from previous room 
 	users.addUser(socket.id, params.name, params.room.toLowerCase());// add the joined user to the List 
 	
-	io.to(params.room).emit('updateUserList', users.getUserList(params.room.toLowerCase()));
+	io.to(params.room.toLowerCase()).emit('updateUserList', users.getUserList(params.room.toLowerCase()));
 
     // ===== Emit to notify new user in the chat room =====
     socket.emit(
