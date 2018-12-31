@@ -38,7 +38,6 @@ io.on("connection", socket => {
       "newMessageFromServer",
       generateMessage("Admin", "Welcome to the chat app")
     );
-
     // ===== Emit to notify new entry in the chat room =====
 	socket.broadcast
 	.to(params.room)
@@ -46,7 +45,6 @@ io.on("connection", socket => {
       "newMessageFromServer",
       generateMessage("Admin", `${params.name} has join the chat room: ${params.room} `)
     );
-
     callback(); // not passing anything if no error
   });
 
