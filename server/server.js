@@ -57,22 +57,30 @@ io.on("connection", socket => {
 
   // ===== Listen to the `messageFromClient` from client =====
   socket.on("messageFromClient", (message, callback) => {
-    console.log("messageFromClient: ", message);
-    // ===== Emit the message received from client to other clients: display the message to everyone (including the sender) in the chat room
-    io.emit(
-      "newMessageFromServer",
-      generateMessage(message.from, message.text)
-    );
+	// console.log("messageFromClient: ", message);
+	let user = users.getUser(socket.id);
+	if (user && isRealString(message.text)) {
+		// ===== Emit the message received from client to other clients: display the message to everyone (including the sender) in the chat room
+		io.to(user.room)
+		.emit(
+		  "newMessageFromServer",
+		  generateMessage(user.name, message.text)
+		);
+	}
     // ******* EVENT ACKNOLEDGMENT *******
     callback("Server got it");
   });
 
   // ==== Listen for the location message ====
   socket.on("location-from-client", coords => {
-    io.emit(
-      "newLocationMessageFromServer",
-      generateLocationMessage("Admin", coords.latitude, coords.longitude)
-    );
+	let user = users.getUser(socket.id);
+	if (user) {
+		io.to(user.room)
+		.emit(
+		  "newLocationMessageFromServer",
+		  generateLocationMessage(user.name, coords.latitude, coords.longitude)
+		);
+	}
   });
 
   //event listener when a client is disconnected from the server
