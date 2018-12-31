@@ -2,21 +2,22 @@
   "name": "chat-app",
   "version": "1.0.0",
   "description": "",
-    "main": "server/server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",  
+    "start": "node server/server.js",
     "test": "mocha server/**/*.test.js",
     "test-watch": "nodemon --exec 'npm test'",
-    "dev" : "nodemon start"
+    "dev": "nodemon start"
   },
-  "engines": { 
+  "engines": {
     "node": "6.2.2",
-    "npm" : "5.0.3"
+    "npm": "5.0.3"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
+    "moment": "^2.15.1",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
