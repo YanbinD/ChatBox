@@ -36,15 +36,16 @@ socket.on('newMessageFromServer',
   jQuery('#message-form').on('submit', function (event) {
     event.preventDefault(); // ****** prevent the default behavior 
     // Default behavior: refresh the page and append the text to the end of url as a query 
-    
+    const messageTextBox = jQuery('[name=message]');
     // ===== emit the message from the client =====
     socket.emit('messageFromClient', {
       from: 'User',
-      text: jQuery('[name=message]').val() 
+      text: messageTextBox.val()
       //select any element which has the name attritube=message and extract the value using the .val() method 
       }, function (message) {
          // ******* EVENT ACKNOLEDGMENT ******* 
-          console.log(message);
+          // console.log(message);
+          messageTextBox.val(''); //clear the value after send
       // can implement something like if the connection is down, 
       // create a banner [ connection to server lose 
       }
@@ -52,20 +53,22 @@ socket.on('newMessageFromServer',
   }
 );
 
-var locationButton = jQuery('#send-location'); 
+let locationButton = jQuery('#send-location'); 
 locationButton.on('click', function () {
   if (!navigator.geolocation) {
     return alert('Geolaction not support by the browser');
   }
- //getCurrentPosition takes two function as argument, 1: success function, 2: error handler 
-
+ locationButton.attr('disabled', 'disabled').text('Sending location..'); // disable the send location button after clicked 
+ //getCurrentPosition takes two function as argument, 1: success function, 2: error handler
   navigator.geolocation.getCurrentPosition(function(position) {
       // console.log(position);
+      locationButton.removeAttr('disabled').text('Send Location'); // re-enable the button after the location is successfully sent
       socket.emit('location-from-client', {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude 
       });
   }, function () {
       alert('uncable to fetch location');
+      locationButton.removeAttr('disabled').text('Send Location'); 
   });
 });
