@@ -7,17 +7,19 @@
   </head>
 
   <body class="chat">
+    <!-- == Side bar == -->
     <div class="chat__sidebar">
       <h3>Participants</h3>
       <div id="users"></div>
     </div>
 
+    <!-- == Main Chat Page == -->
     <div class="chat__main">
       <!-- used for rendering individual message  -->
       <ol id="messages" class="chat__messages"></ol>
 
+      <!--== use to render the form field to enter message ==-->
       <div class="chat__footer">
-        <!-- use to render the form field to enter message -->
         <!-- id will be use for js to retreat the data and css for styling -->
         <form id="message-form">
           <input
@@ -29,17 +31,43 @@
           />
           <button>Send</button>
         </form>
-        <!-- Send Location button -->
+        <!--== Send Location button ==-->
         <button id="send-location">Send location</button>
       </div>
     </div>
 
-
+    <!-- == Template for text message  ==-->
+    <script id="message-template" type="text/template">
+      <li class="message">
+        <div class="message__title">
+          <h4>{{from}}</h4>
+          <span>{{createdAt}}</span>
+        </div>
+        <div class="message__body">
+          <p>{{text}}</p>
+        </div>
+      </li>
+    </script>
+  
+    <!--== Template for location message  ==-->
+    <script id="location-message-template" type="text/template">
+      <li class="message">
+        <div class="message__title">
+          <h4>{{from}}</h4>
+          <span>{{createdAt}}</span>
+        </div>
+        <div class="message__body">
+          <p>
+            <a href="{{url}}" target="_blank">My current location</a>
+          </p>
+        </div>
+      </li>
+    </script>
 
     <!-- making the method for socket.io available  -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/libs/moment.js"></script>
-    
+    <script src="/js/libs/mustache.js"></script>
     <script src="/js/libs/jquery-3.1.0.min.js"></script>
     <script src="/js/client.js"></script>
   </body>
