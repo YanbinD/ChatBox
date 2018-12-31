@@ -4,17 +4,18 @@ const express = require("express");
 const socketIO = require("socket.io");
 const { generateMessage, generateLocationMessage } = require("./utils/message");
 const { isRealString } = require("./utils/validation");
+const { Users } = require("./utils/users");
 // >> 1: instead of doing just `__dirname+ /../public` which goes in and out of the server directory
 // use the `path` module : only shows a resulting path instead of all the intermediate path, also result in a cross os compatible path
 const publicPath = path.join(__dirname, "../public");
 
 const port = process.env.PORT || 3000;
-var app = express();
-var server = http.createServer(app); // >> 4. Create a HTTP server using Express
+let app = express();
+let server = http.createServer(app); // >> 4. Create a HTTP server using Express
 
 // >> 5: tell socket.io which server to use
-var io = socketIO(server);
-
+let io = socketIO(server);
+let users = new Users ();
 // >> 2: use `app.use` to configure express static middleware
 // for serving all the static assets:  http://localhost:3000/images/kitten.jpg the file exist in the public directory
 // ref: https://expressjs.com/en/starter/static-files.html
@@ -31,8 +32,14 @@ io.on("connection", socket => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback("Name and room name are required.");
     }
-// ------------------------ implementation for rooms ------------------------
-    socket.join(params.room);
+	// --------------- implementation for rooms -----------------
+	socket.join(params.room);
+	// --------implementation for Participant's list --------
+	users.removeUser(socket.id); //remove the user from previous room 
+	users.addUser(socket.id, params.name, params.room);// add the joined user to the List 
+	
+	io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+
     // ===== Emit to notify new user in the chat room =====
     socket.emit(
       "newMessageFromServer",
@@ -70,6 +77,16 @@ io.on("connection", socket => {
 
   //event listener when a client is disconnected from the server
   socket.on("disconnect", () => {
+	const user = users.removeUser(socket.id);
+
+	if (user) {
+		io.to(user.room)
+		.emit('updateUserList', users.getUserList(user.room));
+		io.to(user.room)
+		.emit("newMessageFromServer",
+		generateMessage("Admin", `${user.name} has left the chat room: ${user.room} `)
+		);
+	}
     console.log("User was disconnected");
   });
 }); // end io.on()
